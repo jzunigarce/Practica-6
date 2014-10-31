@@ -36,7 +36,7 @@
 				$query->execute(array(':user' => $_POST['user']));
 				$status = array("success" => "Usuario eliminado correctamente");				
 			}catch(PDOException $e){
-				$status = array("error" => "Ocurrió un error al intentar guardar los datos del usuario");
+				$status = array("error" => "Ocurrió un error al intentar eliminar los datos del usuario");
 			}
 		}	
 	}

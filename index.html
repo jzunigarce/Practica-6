@@ -76,7 +76,55 @@
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
         <script type="text/javascript">
-        
+          $(document).ready(function(){
+
+              var createTable = function(data){
+                var table = $('#usuarios');
+                table.html('');
+                for(var i in data){
+                  var row = $('<tr>');
+                  row.append($('<td>', {'html': data[i].nombre})).
+                  append($('<td>', {'html': data[i].ap_paterno})).
+                  append($('<td>', {'html': data[i].ap_materno})).
+                  append($('<td>', {'html': data[i].email}));
+                  table.append(row);
+                }
+              }
+
+              $('#btnSave').click(function(e){
+                e.preventDefault();
+                var name = $('#nombre').val();
+                var apPaterno = $('#ap-paterno').val();
+                var apMaterno = $('#ap-materno').val();
+                var email = $('#email').val();
+
+                $.ajax({
+                  'url': 'cRegistro.php',
+                  'type': 'POST',
+                  'data': {
+                    'name': name,
+                    'apPaterno': apPaterno,
+                    'apMaterno': apMaterno,
+                    'email': email,
+                    'method': 'create'
+                  },
+                  'dataType': 'JSON',
+                  success: function(data){
+                    if(data.status.error){
+                      $('.alert-danger').removeClass('hide').html(data.status.error).delay(1000).queue(function(){
+                        $(this).addClass('hide').dequeue();
+                      });
+                    }else{
+                      $('.alert-success').removeClass('hide').html(data.status.success).delay(1000).queue(function(){
+                        $(this).addClass('hide').dequeue();
+                        createTable(data.response);
+                      });
+                      $(':text').val('');
+                    }
+                  }
+                });
+              });
+          });
         </script>
     </body>
 </html>
